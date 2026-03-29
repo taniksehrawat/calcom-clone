@@ -1,5 +1,4 @@
-const BASE_URL = "http://localhost:5000/api";
-
+const BASE_URL = "https://calcom-clone-b89n.onrender.com/api";
 export const getEvents = async () => {
   const res = await fetch(`${BASE_URL}/events`);
   return res.json();
