@@ -7,7 +7,8 @@ A full-stack scheduling platform inspired by Cal.com that allows users to create
 ## 🌐 Live Demo
 
 Frontend: https://calcom-clone-seven.vercel.app/  
-Backend: https://calcom-clone-b89n.onrender.com  
+TO test Backend: https://calcom-clone-b89n.onrender.com/api/events  
+
 
 ---
 
