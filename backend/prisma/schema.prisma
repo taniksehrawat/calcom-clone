@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------
+// USER MODEL
+// ------------------
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  eventTypes EventType[]
+}
+
+// ------------------
+// EVENT TYPE MODEL
+// ------------------
+model EventType {
+  id          String   @id @default(uuid())
+  title       String
+  duration    Int
+  bufferTime Int @default(0)
+  slug        String   @unique
+  userId      String
+  createdAt   DateTime @default(now())
+
+  user         User           @relation(fields: [userId], references: [id])
+  bookings     Booking[]
+  availability Availability[]
+
+  @@index([userId]) // 🔥 performance
+}
+
+// ------------------
+// AVAILABILITY MODEL
+// ------------------
+model Availability {
+  id        String   @id @default(uuid())
+  dayOfWeek Int
+  startTime String
+  endTime   String
+  eventId   String
+
+  event EventType @relation(fields: [eventId], references: [id])
+
+  @@index([eventId]) // 🔥 performance
+}
+
+// ------------------
+// BOOKING MODEL
+// ------------------
+model Booking {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  startTime  DateTime
+  endTime    DateTime
+  timezone   String   @default("UTC") // 🔥 added
+  eventId    String
+  createdAt  DateTime @default(now())
+
+  event EventType @relation(fields: [eventId], references: [id])
+
+  @@unique([eventId, startTime]) // 🔥 prevent double booking
+  @@index([eventId])            // 🔥 performance
+}
